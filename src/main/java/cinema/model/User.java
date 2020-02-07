@@ -1,12 +1,24 @@
 package cinema.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class User {
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column (unique = true)
     private String email;
     private String  password;
+    private byte[] salt;
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 
     public Long getId() {
         return id;

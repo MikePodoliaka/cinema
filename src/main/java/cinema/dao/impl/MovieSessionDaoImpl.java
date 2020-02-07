@@ -46,7 +46,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
             return session.createQuery(cq).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Error from getAll", e);
+            throw new RuntimeException("Error from findAvailableSessions", e);
         }
     }
 
