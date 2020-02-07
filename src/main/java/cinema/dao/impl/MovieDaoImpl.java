@@ -29,7 +29,6 @@ public class MovieDaoImpl implements MovieDao {
             }
             throw new RuntimeException("Can't insert Movie entity", e);
         }
-
     }
 
     public List<Movie> getAll() {
