@@ -65,4 +65,19 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
             throw new RuntimeException("Can't update ShoppingCart", e);
         }
     }
+
+    @Override
+    public void clear(ShoppingCart shoppingCart) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.clear();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Can't clear shoppingCart", e);
+        }
+    }
 }
