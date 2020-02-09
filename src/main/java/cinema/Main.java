@@ -47,10 +47,15 @@ public class Main {
         User user = authenticationService.login("1", "1");
         System.out.println(user.getEmail());
 
-       ShoppingCartService shoppingCartService = (ShoppingCartService) injector
+        ShoppingCartService shoppingCartService = (ShoppingCartService) injector
                 .getInstance(ShoppingCartService.class);
         shoppingCartService.addSession(movieSession, user);
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
         System.out.println(shoppingCart);
+
+        OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
+        Order order = orderService.completeOrder(shoppingCart.getTickets(), user);
+        System.out.println(order);
+        orderService.getOrderHistory(user).forEach(System.out::println);
     }
 }

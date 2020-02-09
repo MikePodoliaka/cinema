@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity (name = "orders")
 public class Order {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @OneToMany (fetch = FetchType.EAGER)
     private List<Ticket> tickets;
-    private LocalDateTime orderData;
+    private LocalDateTime orderDate;
     @ManyToOne
     private User user;
 
@@ -31,12 +31,12 @@ public class Order {
         this.tickets = tickets;
     }
 
-    public LocalDateTime getOrderData() {
-        return orderData;
+    public LocalDateTime getOrderDate() {
+        return orderDate;
     }
 
-    public void setOrderData(LocalDateTime orderData) {
-        this.orderData = orderData;
+    public void setOrderData(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
     public User getUser() {
@@ -52,7 +52,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", tickets=" + tickets +
-                ", orderData=" + orderData +
+                ", orderDate=" + orderDate +
                 ", user=" + user +
                 '}';
     }
