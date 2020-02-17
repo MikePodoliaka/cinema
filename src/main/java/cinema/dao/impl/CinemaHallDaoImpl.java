@@ -1,17 +1,17 @@
 package cinema.dao.impl;
 
 import cinema.dao.CinemaHallDao;
-import cinema.lib.Dao;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-@Dao
+@Repository
 public class CinemaHallDaoImpl implements CinemaHallDao {
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {

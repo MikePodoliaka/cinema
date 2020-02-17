@@ -1,17 +1,17 @@
 package cinema.dao.impl;
 
 import cinema.dao.MovieSessionDao;
-import cinema.lib.Dao;
 import cinema.model.MovieSession;
 import cinema.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Dao
+@Repository
 public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
