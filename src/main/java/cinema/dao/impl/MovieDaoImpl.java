@@ -1,18 +1,18 @@
 package cinema.dao.impl;
 
 import cinema.dao.MovieDao;
-import cinema.lib.Dao;
 import cinema.model.Movie;
 
 import cinema.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaQuery;
 
 import java.util.List;
 
-@Dao
+@Repository
 public class MovieDaoImpl implements MovieDao {
 
     public Movie add(Movie movie) {

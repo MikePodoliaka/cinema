@@ -1,19 +1,19 @@
 package cinema.dao.impl;
 
 import cinema.dao.UserDao;
-import cinema.lib.Dao;
 import cinema.model.MovieSession;
 import cinema.model.User;
 import cinema.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-@Dao
+@Repository
 public class UserDaoImpl implements UserDao {
     @Override
     public User add(User user) {
