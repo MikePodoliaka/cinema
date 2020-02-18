@@ -10,6 +10,19 @@ public class Movie {
     private String title;
     private String description;
 
+    public Movie(Movie movie) {
+        this.title = movie.getTitle();
+        this.description = movie.getDescription();
+    }
+
+    public Movie() {
+    }
+
+    public Movie(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

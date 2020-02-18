@@ -1,5 +1,6 @@
 package cinema.config;
 
+import cinema.model.*;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +42,9 @@ public class AppConfig {
         properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
 
         localSessionFactoryBean.setHibernateProperties(properties);
-        //localSessionFactoryBean.setAnnotatedClasses(User.class);
+        localSessionFactoryBean.setAnnotatedClasses(User.class, CinemaHall.class,
+                Movie.class, MovieSession.class, Order.class,
+                ShoppingCart.class, Ticket.class);
         return localSessionFactoryBean;
     }
 
