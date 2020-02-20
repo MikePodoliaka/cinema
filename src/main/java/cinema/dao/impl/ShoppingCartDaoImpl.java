@@ -5,19 +5,28 @@ import cinema.model.ShoppingCart;
 
 import cinema.model.Ticket;
 import cinema.model.User;
-import cinema.util.HibernateUtil;
+
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
+    @Autowired
+    private final SessionFactory sessionFactory;
+
+    public ShoppingCartDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Long itemId = (Long) session.save(shoppingCart);
             transaction.commit();
@@ -34,7 +43,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
     @Override
     public ShoppingCart getByUser(User user) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             ShoppingCart shoppingCart =
                     session.createQuery("FROM ShoppingCart WHERE user=:user", ShoppingCart.class)
                             .setParameter("user", user).uniqueResult();
@@ -54,7 +63,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
     @Override
     public void update(ShoppingCart shoppingCart) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session =sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.update(shoppingCart);
             transaction.commit();
@@ -69,7 +78,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
     @Override
     public void clear(ShoppingCart shoppingCart) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.clear();
             transaction.commit();

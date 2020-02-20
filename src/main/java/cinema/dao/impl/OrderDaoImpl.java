@@ -2,24 +2,30 @@ package cinema.dao.impl;
 
 import cinema.dao.OrderDao;
 import cinema.model.Order;
-import cinema.model.Ticket;
 import cinema.model.User;
-import cinema.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaQuery;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class OrderDaoImpl implements OrderDao {
+    private final SessionFactory sessionFactory;
+
+    public OrderDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public Order add(Order order) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Long orderId = (Long) session.save(order);
             transaction.commit();
@@ -29,22 +35,31 @@ public class OrderDaoImpl implements OrderDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't insert order", e);
+            throw new RuntimeException("Cannot create Order cart " + e);
         }
     }
 
     @Override
-    public List<Order> getOrderHistory(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
-            Root<Order> root = criteriaQuery.from(Order.class);
+    public List<Order> getUserOrders(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Order> query = session.createQuery("FROM Order  WHERE user = "
+                    + ":user", Order.class);
+            query.setParameter("user", user);
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot find OrderList using user " + e);
+        }
+    }
 
-            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("user"), user));
+    @Override
+    public List<Order> getAll() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaQuery<Order> criteriaQuery = session.getCriteriaBuilder()
+                    .createQuery(Order.class);
+            criteriaQuery.from(Order.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Error from getOrderHistory", e);
+            throw new RuntimeException("Error retrieving all orders " + e);
         }
-
     }
 }

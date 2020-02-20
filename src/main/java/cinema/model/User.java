@@ -1,5 +1,4 @@
 package cinema.model;
-
 import javax.persistence.*;
 
 @Entity
@@ -9,8 +8,17 @@ public class User {
     private Long id;
     @Column (unique = true)
     private String email;
+    private String name;
     private String  password;
     private byte[] salt;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public byte[] getSalt() {
         return salt;
