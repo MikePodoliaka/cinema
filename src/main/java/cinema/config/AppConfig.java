@@ -1,52 +1,52 @@
 package cinema.config;
 
-import cinema.model.*;
-import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
-@EnableWebMvc
 @PropertySource("classpath:db.properties")
-@ComponentScan({"cinema.dao", "cinema.service","cinema.controller"})
+@ComponentScan(basePackages = {"cinema.dao",
+        "cinema.service"})
 public class AppConfig {
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
-    @Bean
-    public DataSource getDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(environment.getProperty("db.driver"));
-        dataSource.setUrl(environment.getProperty("db.url"));
-        dataSource.setUsername(environment.getProperty("db.name"));
-        dataSource.setPassword(environment.getProperty("db.pas"));
-        return dataSource;
+    public AppConfig(Environment environment) {
+        this.environment = environment;
     }
 
     @Bean
     public LocalSessionFactoryBean getSessionFactory() {
-        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
-        localSessionFactoryBean.setDataSource(getDataSource());
+        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
+        factoryBean.setDataSource(getDataSource());
 
         Properties properties = new Properties();
-        properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
-        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
+        properties.put("show_sql", environment.getProperty("show_sql"));
+        properties.put("format_sql", environment.getProperty("format_sql"));
+        properties.put("use_sql_comments", environment.getProperty("use_sql_comments"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl"
+                + ".auto"));
 
-        localSessionFactoryBean.setHibernateProperties(properties);
-        localSessionFactoryBean.setAnnotatedClasses(User.class, CinemaHall.class,
-                Movie.class, MovieSession.class, Order.class,
-                ShoppingCart.class, Ticket.class);
-        return localSessionFactoryBean;
+        factoryBean.setHibernateProperties(properties);
+        factoryBean.setPackagesToScan("cinema.model");
+        return factoryBean;
     }
 
-
+    @Bean
+    public DataSource getDataSource() {
+        BasicDataSource source = new BasicDataSource();
+        source.setDriverClassName(environment.getProperty("db.driver"));
+        source.setUrl(environment.getProperty("db.url"));
+        source.setUsername(environment.getProperty("db.username"));
+        source.setPassword(environment.getProperty("db.password"));
+        return source;
+    }
 }
