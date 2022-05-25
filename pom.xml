@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.checkstyle.plugin.version>3.1.0</maven.checkstyle.plugin.version>
         <spring.version>5.2.3.RELEASE</spring.version>
-        <spring.security>5.2.2.RELEASE</spring.security>
+        <spring.security>5.5.7</spring.security>
     </properties>
     <dependencies>
         <dependency>
